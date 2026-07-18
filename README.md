@@ -1,5 +1,12 @@
 # Family Koda Control
 
+![Version](https://img.shields.io/badge/version-2.0-blue)
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+![Python](https://img.shields.io/badge/Python-3.12.8-3776AB?logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white)
+![SQLite](https://img.shields.io/badge/SQLite-3-003B57?logo=sqlite&logoColor=white)
+![Cloudflare Workers](https://img.shields.io/badge/Cloudflare-Workers-F38020?logo=cloudflare&logoColor=white)
+
 A private family finance command center for managing monthly budgets,
 tracking expenses, and understanding household spending behavior.
 
@@ -45,6 +52,32 @@ understanding spending behavior, not policing it.
 `TODO` *Future versions will integrate AI to automatically process
 receipts, suggest categories, and provide spending insights.*
 
+## Screenshots
+
+<table>
+  <tr>
+    <td align="center">
+      <img src="./screen_shots/dashboard_light.png" width="450"><br>
+      <b>Dashboard (Light)</b>
+    </td>
+    <td align="center">
+      <img src="./screen_shots/dashbooard_dark.png" width="450"><br>
+      <b>Dashboard (Dark)</b>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="./screen_shots/Expanses.png" width="450"><br>
+      <b>Expense Settings</b>
+    </td>
+    <td align="center">
+      <img src="./screen_shots/budget.png" width="450"><br>
+      <b>Budget Settings</b>
+    </td>
+  </tr>
+</table>
+
+
 ## Quick start: run it locally
 
 This is the easy path and the recommended starting point.
@@ -61,6 +94,9 @@ python3 -m venv .venv
 .venv/bin/pip install -r requirements.txt
 npm install
 npm run build
+```
+Then start to host on local
+```
 .venv/bin/uvicorn app.main:app --reload
 ```
 
