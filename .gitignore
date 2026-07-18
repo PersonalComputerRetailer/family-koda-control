@@ -1,0 +1,41 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+node_modules/
+data/*.db
+data/*.db-*
+storage/receipts/*
+!storage/receipts/.gitkeep
+data/cashflow.db
+storage/receipts/
+.env
+
+# Private Cloudflare/local files
+# Real deployment config stays on your machine only — copy it from
+# wrangler.jsonc.example (see README). Ignoring it here makes committing
+# your real Access domain, AUD tag, or D1 ID impossible by accident.
+wrangler.jsonc
+.dev.vars
+.dev.vars.*
+.env.*
+.wrangler/
+backups/
+exports/
+*.sqlite
+*.sqlite3
+*.dump
+
+# Personal planning notes — never publish
+plan/
+
+# macOS
+.DS_Store
+
+app/__pycache__/__init__.cpython-314.pyc
+app/__pycache__/database.cpython-314.pyc
+app/__pycache__/main.cpython-314.pyc
+app/static/app.css
+app/static/lucide.min.js
+worker-configuration.d.ts
+package-lock.json
