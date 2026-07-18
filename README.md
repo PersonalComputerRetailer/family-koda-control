@@ -32,6 +32,14 @@ limit is visible *before* month-end, not discovered afterward on a bank
 statement. Overspending is never blocked, only made obvious: the goal is
 understanding spending behavior, not policing it.
 
+**Pro-Tips for Success**
+- Deduct Fixed Expenses First: Knock out rent and bills first, then budget the remaining disposable income. Budgeting isn't just about managing money—it’s about managing desires.
+- Categorize by Intent: Use Home for groceries, Dine Out for takeout cravings, Activity for family outings, and keep a dedicated chunk for yourself to spend on whatever the hell you want.
+- Check Before You Spend: Treat your budget like a punch card. Glance at the dashboard to see how many "punches" you have left before you tap your card.
+- Keep It Simple: Don't get bogged down in micro-details. If you spend $50 at Walmart, just log $50 under Home. You can split bills to different categories, but don't overcomplicate it.
+
+**The Golden Rule**: Consistency beats perfection. Find a rhythm that works for you and stick to it.
+
 ## Features
 
 - Current and historical monthly dashboards
