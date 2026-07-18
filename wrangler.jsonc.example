@@ -1,0 +1,25 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "koda-control",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-07-16",
+  "workers_dev": true,
+  "preview_urls": false,
+  "vars": {
+    // Set these to your own Cloudflare Access team domain and policy AUD tag
+    // before deploying. Keep the real values out of the public repository.
+    "ACCESS_TEAM_DOMAIN": "https://your-team.cloudflareaccess.com",
+    "ACCESS_POLICY_AUD": "REPLACE_WITH_YOUR_ACCESS_POLICY_AUD"
+  },
+  "assets": {
+    "directory": "./app/static"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "koda-control-db",
+      "database_id": "REPLACE_WITH_YOUR_D1_DATABASE_ID",
+      "migrations_dir": "migrations"
+    }
+  ]
+}
