@@ -98,6 +98,8 @@ This is the easy path and the recommended starting point.
 ### Setup and run
 
 ```bash
+git clone git@github.com:PersonalComputerRetailer/family-koda-control.git
+cd family-koda-control
 python3 -m venv .venv
 .venv/bin/pip install -r requirements.txt
 npm install
