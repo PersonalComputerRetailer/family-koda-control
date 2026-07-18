@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<section class="page-heading dashboard-heading">
+  <div>
+    <p class="eyebrow">{{ household_name }}</p>
+    <h1>{{ month_label }}</h1>
+    <p class="subheading">A clear view of this month's household spending.</p>
+  </div>
+  <div class="month-switcher" aria-label="Choose dashboard month">
+    <a href="/?month={{ previous_month }}" class="icon-button" title="Previous month" aria-label="Previous month">
+      <i data-lucide="chevron-left" aria-hidden="true"></i>
+    </a>
+    <form method="get">
+      <label class="sr-only" for="dashboard-month">Month</label>
+      <input id="dashboard-month" type="month" name="month" value="{{ month }}" onchange="this.form.requestSubmit()">
+    </form>
+    <a href="/?month={{ next_month }}" class="icon-button" title="Next month" aria-label="Next month">
+      <i data-lucide="chevron-right" aria-hidden="true"></i>
+    </a>
+  </div>
+</section>
+
+<section class="summary-grid" aria-label="Monthly totals">
+  <article class="metric-card">
+    <div class="metric-icon budget-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect width="20" height="14" x="2" y="5" rx="2"/><path d="M16 13h4M2 10h20"/></svg></div>
+    <p>Total budget</p>
+    <strong>{{ total_budget_cents | money }}</strong>
+    <span>Set across {{ categories | length }} categories</span>
+  </article>
+  <article class="metric-card">
+    <div class="metric-icon spent-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v18h18"/><path d="m7 9 4 4 4-4 5 5"/></svg></div>
+    <p>Spent</p>
+    <strong>{{ total_spent_cents | money }}</strong>
+    <span>This calendar month</span>
+  </article>
+  <article class="metric-card {% if remaining_cents < 0 %}negative{% endif %}">
+    <div class="metric-icon remaining-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+    <p>Remaining</p>
+    <strong>{{ remaining_cents | money }}</strong>
+    <span>{% if remaining_cents < 0 %}Household budget exceeded{% else %}Available to spend{% endif %}</span>
+  </article>
+</section>
+
+<section class="section-block">
+  <div class="section-heading">
+    <div>
+      <h2>Category budgets</h2>
+      <p>Usage against the monthly plan.</p>
+    </div>
+    <a href="/budgets" class="text-link">Edit budgets <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></a>
+  </div>
+  <div class="category-grid">
+    {% for category in categories %}
+    <article class="category-card status-{{ category.status_color }}">
+      <div class="category-topline">
+        <div>
+          <h3><a class="category-link" href="/expenses?month={{ month }}&category={{ category.id }}">{{ category.name }}</a></h3>
+          <span class="status-label">{{ category.status }}</span>
+        </div>
+        <strong>{{ category.percentage }}%</strong>
+      </div>
+      <div class="progress-track" role="progressbar" aria-label="{{ category.name }} budget used" aria-valuenow="{{ category.percentage }}" aria-valuemin="0" aria-valuemax="100">
+        <span style="width: {{ category.bar_width }}%"></span>
+      </div>
+      <div class="category-numbers">
+        <span><b>{{ category.spent_cents | money }}</b> spent of {{ category.monthly_budget_cents | money }}</span>
+        <span class="remaining {% if category.remaining_cents < 0 %}over{% endif %}">{{ category.remaining_cents | money }} left</span>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="section-block recent-section">
+  <div class="section-heading">
+    <div>
+      <h2>Recent expenses</h2>
+      <p>Latest activity for {{ month_label }}.</p>
+    </div>
+    <a href="/expenses?month={{ month }}" class="text-link">View all <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></a>
+  </div>
+  {% if recent_expenses %}
+  <div class="expense-list">
+    {% for expense in recent_expenses %}
+    <div class="expense-row">
+      <div class="expense-avatar">{{ expense.item[0] | upper }}</div>
+      <div class="expense-main">
+        <strong>{{ expense.item }}</strong>
+        <span>{{ expense.category }} · {{ expense.created_by }}</span>
+      </div>
+      <div class="expense-amount">
+        <strong>{{ expense.amount_cents | money }}</strong>
+        <span>{{ expense.date }}</span>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <div class="empty-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8v4l3 2"/><circle cx="12" cy="12" r="9"/></svg></div>
+    <h3>No expenses this month</h3>
+    <p>Add the first purchase to start tracking {{ month_label }}.</p>
+    <a href="/expenses" class="primary-button">Add expense</a>
+  </div>
+  {% endif %}
+</section>
+{% endblock %}

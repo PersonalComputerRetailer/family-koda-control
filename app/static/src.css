@@ -1,0 +1,210 @@
+@import "tailwindcss";
+@source "../templates/**/*.html";
+
+@theme {
+  --color-ink: #17201f;
+  --color-muted: #64706e;
+  --color-line: #dfe5e3;
+  --color-surface: #ffffff;
+  --color-raised: #eef2f1;
+  --color-canvas: #f5f7f6;
+  --color-primary: #0f766e;
+  --color-primary-dark: #115e59;
+  --font-sans: "Inter", "Segoe UI", system-ui, sans-serif;
+}
+
+@layer base {
+  * { box-sizing: border-box; }
+  body { @apply m-0 bg-canvas font-sans text-ink antialiased; letter-spacing: 0; }
+  button, input, select, textarea { font: inherit; letter-spacing: 0; }
+  button, a { -webkit-tap-highlight-color: transparent; }
+  svg { @apply fill-none stroke-current; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+}
+
+@layer components {
+  .shell { @apply mx-auto w-full max-w-[1180px] px-4 sm:px-6 lg:px-8; }
+  .site-header { @apply sticky top-0 z-30 border-b border-line bg-surface/95 backdrop-blur; }
+  .header-inner { @apply flex h-16 items-center gap-5; }
+  .brand { @apply flex shrink-0 items-center gap-2.5 text-base font-bold text-ink no-underline; }
+  .brand-version { @apply rounded-full border border-line px-1.5 py-0.5 text-[10px] font-bold uppercase leading-none text-muted; letter-spacing: .04em; }
+  .brand-mark { @apply grid size-9 place-items-center rounded-md bg-primary text-white; }
+  .brand-mark svg { @apply size-5; }
+  .desktop-nav { @apply ml-5 hidden h-full items-center gap-1 md:flex; }
+  .nav-link { @apply relative flex h-full items-center gap-2 px-3 text-sm font-semibold text-muted no-underline transition-colors hover:text-ink; }
+  .nav-link svg { @apply size-[18px]; }
+  .nav-link.active { @apply text-primary; }
+  .nav-link.active::after { content: ""; @apply absolute inset-x-3 bottom-0 h-0.5 bg-primary; }
+  .header-action { @apply ml-2; }
+  .theme-toggle { @apply ml-auto grid size-10 shrink-0 cursor-pointer place-items-center rounded-md border border-line bg-surface p-0 text-muted transition-colors hover:border-primary hover:text-primary; }
+  .theme-toggle svg { @apply size-5; }
+  .theme-toggle .theme-icon-sun { display: none; }
+  .theme-toggle .theme-icon-moon { display: block; }
+  .primary-button, .secondary-button { @apply inline-flex min-h-10 items-center justify-center gap-2 rounded-md px-4 text-sm font-bold no-underline transition-colors focus:outline-none focus:ring-2 focus:ring-primary/30; }
+  .primary-button { @apply border border-primary bg-primary text-white hover:border-primary-dark hover:bg-primary-dark; }
+  .secondary-button { @apply border border-line bg-surface text-ink hover:border-primary hover:text-primary; }
+  .primary-button svg, .secondary-button svg { @apply size-[18px]; }
+  .main-content { @apply pb-28 pt-8 md:pb-12 md:pt-10; }
+  .page-heading { @apply mb-7 flex flex-wrap items-end justify-between gap-5; }
+  .page-heading h1 { @apply m-0 text-3xl font-bold leading-tight sm:text-[34px]; }
+  .eyebrow { @apply mb-1.5 mt-0 text-xs font-bold uppercase text-primary; letter-spacing: .08em; }
+  .subheading { @apply mb-0 mt-2 max-w-2xl text-sm leading-6 text-muted sm:text-base; }
+  .month-switcher { @apply flex items-center gap-2; }
+  .month-switcher input, .filter-form input { @apply h-10 rounded-md border border-line bg-surface px-3 text-sm font-semibold text-ink outline-none focus:border-primary focus:ring-2 focus:ring-primary/10; }
+  .icon-button { @apply grid size-10 shrink-0 cursor-pointer place-items-center rounded-md border border-line bg-surface p-0 text-muted no-underline transition-colors hover:border-primary hover:text-primary; }
+  .icon-button svg { @apply size-5; }
+  .summary-grid { @apply grid grid-cols-1 gap-4 sm:grid-cols-3; }
+  .metric-card { @apply relative rounded-lg border border-line bg-surface p-5; }
+  .metric-card p { @apply mb-2 mt-0 text-sm font-semibold text-muted; }
+  .metric-card strong { @apply block text-2xl font-bold leading-tight sm:text-[28px]; }
+  .metric-card > span { @apply mt-2 block text-xs text-muted; }
+  .metric-card.negative strong { @apply text-red-700; }
+  .metric-icon { @apply absolute right-4 top-4 grid size-9 place-items-center rounded-md; }
+  .metric-icon svg { @apply size-[18px]; }
+  .budget-icon { @apply bg-teal-50 text-teal-700; }
+  .spent-icon { @apply bg-amber-50 text-amber-700; }
+  .remaining-icon { @apply bg-emerald-50 text-emerald-700; }
+  .section-block { @apply mt-9; }
+  .section-heading { @apply mb-4 flex items-end justify-between gap-4; }
+  .section-heading h2 { @apply m-0 text-lg font-bold; }
+  .section-heading p { @apply mb-0 mt-1 text-sm text-muted; }
+  .text-link { @apply inline-flex shrink-0 items-center gap-1 text-sm font-bold text-primary no-underline hover:text-primary-dark; }
+  .text-link svg { @apply size-4; }
+  .category-grid { @apply grid grid-cols-1 gap-4 lg:grid-cols-2; }
+  .category-card { @apply rounded-lg border border-line bg-surface p-5; }
+  .category-topline { @apply flex items-start justify-between gap-4; }
+  .category-topline h3 { @apply mb-1.5 mt-0 text-base font-bold; }
+  .category-topline > strong { @apply text-lg; }
+  .status-label { @apply inline-flex rounded px-2 py-0.5 text-[11px] font-bold uppercase; letter-spacing: .04em; }
+  .progress-track { @apply mt-5 h-2 w-full overflow-hidden rounded bg-raised; }
+  .progress-track span { @apply block h-full rounded transition-all; }
+  .category-numbers { @apply mt-3 flex flex-wrap items-center justify-between gap-2 text-xs text-muted; }
+  .category-numbers b { @apply text-sm text-ink; }
+  .category-numbers .remaining { @apply font-semibold; }
+  .category-numbers .over { @apply text-purple-700; }
+  .status-green .status-label { @apply bg-emerald-50 text-emerald-700; }
+  .status-green .progress-track span { @apply bg-emerald-500; }
+  .status-amber .status-label { @apply bg-amber-50 text-amber-800; }
+  .status-amber .progress-track span { @apply bg-amber-400; }
+  .status-red .status-label { @apply bg-red-50 text-red-700; }
+  .status-red .progress-track span { @apply bg-red-500; }
+  .status-purple .status-label { @apply bg-purple-100 text-purple-800; }
+  .status-purple .progress-track span { @apply bg-purple-600; }
+  .recent-section { @apply rounded-lg border border-line bg-surface p-5 sm:p-6; }
+  .expense-list { @apply divide-y divide-line; }
+  .expense-row { @apply flex min-w-0 items-center gap-3 py-3.5; }
+  .expense-avatar { @apply grid size-9 shrink-0 place-items-center rounded-md bg-raised text-sm font-bold text-muted; }
+  .expense-main { @apply min-w-0 flex-1; }
+  .expense-main strong, .expense-main span { @apply block; }
+  .expense-main strong { @apply truncate text-sm; }
+  .expense-main span { @apply mt-1 truncate text-xs text-muted; }
+  .expense-amount { @apply shrink-0 text-right; }
+  .expense-amount strong, .expense-amount span { @apply block; }
+  .expense-amount strong { @apply text-sm; }
+  .expense-amount span { @apply mt-1 text-xs text-muted; }
+  .empty-state { @apply flex flex-col items-center py-10 text-center; }
+  .empty-state.compact { @apply py-14; }
+  .empty-icon { @apply mb-3 grid size-11 place-items-center rounded-md bg-raised text-muted; }
+  .empty-icon svg { @apply size-6; }
+  .empty-state h3 { @apply m-0 text-base font-bold; }
+  .empty-state p { @apply mb-5 mt-1.5 text-sm text-muted; }
+  .alert { @apply mb-5 rounded-md border px-4 py-3 text-sm font-semibold; }
+  .alert.success { @apply border-emerald-200 bg-emerald-50 text-emerald-800; }
+  .alert.error { @apply border-red-200 bg-red-50 text-red-800; }
+  .expense-layout { @apply grid items-start gap-5 lg:grid-cols-[360px_minmax(0,1fr)]; }
+  .form-panel, .history-panel, .budget-panel, .add-category-panel { @apply rounded-lg border border-line bg-surface; }
+  .form-panel, .add-category-panel { @apply p-5; }
+  .panel-heading { @apply flex items-start gap-3 border-b border-line p-5; }
+  .form-panel > .panel-heading, .add-category-panel > .panel-heading { @apply -mx-5 -mt-5 mb-5; }
+  .panel-heading h2 { @apply m-0 text-base font-bold; }
+  .panel-heading p { @apply mb-0 mt-1 text-xs leading-5 text-muted; }
+  .panel-icon { @apply grid size-9 shrink-0 place-items-center rounded-md bg-teal-50 text-primary; }
+  .panel-icon svg { @apply size-[18px]; }
+  .stacked-form { @apply space-y-4; }
+  .field-grid { @apply grid grid-cols-2 gap-3; }
+  .field label { @apply mb-1.5 block text-xs font-bold text-ink; }
+  .field label span { @apply font-normal text-muted; }
+  .field input, .field select, .field textarea, .filter-form select { @apply w-full rounded-md border border-line bg-surface px-3 text-sm text-ink outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10; }
+  .field input, .field select, .filter-form select { @apply h-10; }
+  .field textarea { @apply resize-y py-2.5 leading-5; }
+  .field-hint { @apply mb-0 mt-1 text-[11px] leading-4 text-muted; }
+  .field-error { @apply mb-0 mt-1 text-xs font-semibold text-red-700; }
+  .money-input { @apply flex h-10 overflow-hidden rounded-md border border-line bg-surface focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/10; }
+  .money-input > span { @apply grid w-9 shrink-0 place-items-center border-r border-line bg-raised text-sm text-muted; }
+  .money-input input { @apply h-full min-w-0 flex-1 border-0 px-3 outline-none ring-0 focus:ring-0; }
+  .full-button { @apply w-full; }
+  .history-toolbar { @apply flex flex-wrap items-center justify-between gap-4 border-b border-line p-5; }
+  .history-toolbar h2 { @apply m-0 text-base font-bold; }
+  .history-toolbar p { @apply mb-0 mt-1 text-xs text-muted; }
+  .filter-form { @apply flex flex-wrap gap-2; }
+  .filter-form select { @apply w-auto min-w-36; }
+  .full-list { @apply px-5; }
+  .delete-button { @apply grid size-8 cursor-pointer place-items-center rounded border-0 bg-transparent text-muted hover:bg-red-50 hover:text-red-700; }
+  .delete-button svg { @apply size-[17px]; }
+  .budget-layout { @apply grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_340px]; }
+  .budget-rows { @apply divide-y divide-line px-5; }
+  .budget-row { @apply flex items-center justify-between gap-4 py-4 text-sm font-semibold; }
+  .compact-money { @apply w-40; }
+  .panel-actions { @apply flex justify-end border-t border-line p-5; }
+  .mobile-nav { @apply fixed inset-x-0 bottom-0 z-30 grid h-[68px] grid-cols-3 border-t border-line bg-surface md:hidden; }
+  .mobile-nav-link { @apply flex flex-col items-center justify-center gap-1 text-[11px] font-semibold text-muted no-underline; }
+  .mobile-nav-link svg { @apply size-5; }
+  .mobile-nav-link.active { @apply text-primary; }
+  .page-loader { @apply fixed left-0 top-0 z-50 h-0.5 w-full origin-left bg-primary; animation: loading 1s ease-in-out infinite; }
+  .sr-only { @apply absolute h-px w-px overflow-hidden whitespace-nowrap p-0; clip: rect(0,0,0,0); }
+}
+
+@keyframes loading { 0% { transform: scaleX(.05); } 50% { transform: scaleX(.7); } 100% { transform: scaleX(1); } }
+
+/* Dark theme: flip the semantic tokens, then tidy up the few hard-coded
+   accent colors. Kept unlayered so these rules win over Tailwind utilities. */
+:root { color-scheme: light; }
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --color-ink: #e6edeb;
+  --color-muted: #97a5a2;
+  --color-line: #2b3735;
+  --color-surface: #151d1c;
+  --color-raised: #202a28;
+  --color-canvas: #0d1312;
+  --color-primary: #2dd4bf;
+  --color-primary-dark: #14b8a6;
+}
+
+:root[data-theme="dark"] .theme-toggle .theme-icon-sun { display: block; }
+:root[data-theme="dark"] .theme-toggle .theme-icon-moon { display: none; }
+
+/* Bright teal accents need dark glyphs to stay legible. */
+:root[data-theme="dark"] .primary-button,
+:root[data-theme="dark"] .brand-mark { color: #06211f; }
+
+:root[data-theme="dark"] ::placeholder { color: var(--color-muted); opacity: 1; }
+
+/* Pale status/accent chips become translucent tints on dark surfaces. */
+:root[data-theme="dark"] .status-green .status-label { background: rgba(16, 185, 129, .16); color: #6ee7b7; }
+:root[data-theme="dark"] .status-amber .status-label { background: rgba(245, 158, 11, .16); color: #fcd34d; }
+:root[data-theme="dark"] .status-red .status-label { background: rgba(239, 68, 68, .16); color: #fca5a5; }
+:root[data-theme="dark"] .status-purple .status-label { background: rgba(168, 85, 247, .18); color: #d8b4fe; }
+:root[data-theme="dark"] .budget-icon { background: rgba(45, 212, 191, .15); color: #5eead4; }
+:root[data-theme="dark"] .spent-icon { background: rgba(245, 158, 11, .15); color: #fcd34d; }
+:root[data-theme="dark"] .remaining-icon { background: rgba(16, 185, 129, .15); color: #6ee7b7; }
+:root[data-theme="dark"] .panel-icon { background: rgba(45, 212, 191, .15); color: #5eead4; }
+:root[data-theme="dark"] .metric-card.negative strong { color: #fca5a5; }
+:root[data-theme="dark"] .category-numbers .over { color: #d8b4fe; }
+:root[data-theme="dark"] .alert.success { background: rgba(16, 185, 129, .12); border-color: rgba(16, 185, 129, .3); color: #6ee7b7; }
+:root[data-theme="dark"] .alert.error { background: rgba(239, 68, 68, .12); border-color: rgba(239, 68, 68, .3); color: #fca5a5; }
+:root[data-theme="dark"] .delete-button:hover { background: rgba(239, 68, 68, .15); color: #fca5a5; }
+
+@media (max-width: 639px) {
+  .header-action span { display: none; }
+  .header-action { width: 40px; padding: 0; }
+  .dashboard-heading { align-items: flex-start; }
+  .field-grid { grid-template-columns: 1fr; }
+  .history-toolbar { align-items: flex-start; }
+  .filter-form { width: 100%; }
+  .filter-form input, .filter-form select { min-width: 0; flex: 1; }
+  .expense-main span { max-width: 42vw; }
+  .full-list { padding-left: 16px; padding-right: 16px; }
+  .full-list .expense-avatar { display: none; }
+  .budget-row { align-items: flex-start; flex-direction: column; }
+  .compact-money { width: 100%; }
+}

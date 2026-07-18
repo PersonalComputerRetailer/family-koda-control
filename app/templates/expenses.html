@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% block title %}Expenses{% endblock %}
+{% block content %}
+<section class="page-heading">
+  <div>
+    <p class="eyebrow">Household ledger</p>
+    <h1>Expenses</h1>
+    <p class="subheading">Record purchases with enough detail to understand where the money went.</p>
+  </div>
+</section>
+
+{% if saved %}<div class="alert success" role="status">Expense saved successfully.</div>{% endif %}
+
+<div class="expense-layout">
+  <section class="form-panel" id="expense-form-panel">
+    <div class="panel-heading">
+      <div class="panel-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></div>
+      <div><h2>Add an expense</h2><p>All fields except notes are required.</p></div>
+    </div>
+    <form method="post" action="/expenses" class="stacked-form">
+      <input type="hidden" name="month" value="{{ month }}">
+      <div class="field">
+        <label for="expense-date">Date</label>
+        <input id="expense-date" type="date" name="expense_date" value="{{ form.expense_date or today }}" required>
+        {% if errors.expense_date %}<p class="field-error">{{ errors.expense_date }}</p>{% endif %}
+      </div>
+      <div class="field">
+        <label for="item">What was it for?</label>
+        <input id="item" type="text" name="item" maxlength="120" value="{{ form.item or '' }}" placeholder="Kids shoes from Amazon" required>
+        <p class="field-hint">Use the purchase purpose, not only the store name.</p>
+        {% if errors.item %}<p class="field-error">{{ errors.item }}</p>{% endif %}
+      </div>
+      <div class="field-grid">
+        <div class="field">
+          <label for="amount">Amount</label>
+          <div class="money-input"><span>$</span><input id="amount" type="number" name="amount" min="0.01" step="0.01" inputmode="decimal" value="{{ form.amount or '' }}" placeholder="0.00" required></div>
+          {% if errors.amount %}<p class="field-error">{{ errors.amount }}</p>{% endif %}
+        </div>
+        <div class="field">
+          <label for="created-by">Added by</label>
+          <select id="created-by" name="created_by" required>
+            <option value="">Choose</option>
+            <option value="Husband" {% if form.created_by == 'Husband' %}selected{% endif %}>Husband</option>
+            <option value="Wife" {% if form.created_by == 'Wife' %}selected{% endif %}>Wife</option>
+          </select>
+          {% if errors.created_by %}<p class="field-error">{{ errors.created_by }}</p>{% endif %}
+        </div>
+      </div>
+      <div class="field">
+        <label for="category-id">Category</label>
+        <select id="category-id" name="category_id" required>
+          <option value="">Choose a category</option>
+          {% for category in categories %}<option value="{{ category.id }}" {% if form.category_id == category.id %}selected{% endif %}>{{ category.name }}</option>{% endfor %}
+        </select>
+        {% if errors.category_id %}<p class="field-error">{{ errors.category_id }}</p>{% endif %}
+      </div>
+      <div class="field">
+        <label for="notes">Notes <span>Optional</span></label>
+        <textarea id="notes" name="notes" maxlength="500" rows="3" placeholder="Anything useful to remember">{{ form.notes or '' }}</textarea>
+        {% if errors.notes %}<p class="field-error">{{ errors.notes }}</p>{% endif %}
+      </div>
+      <button class="primary-button full-button" type="submit">
+        <i data-lucide="check" aria-hidden="true"></i>
+        Save expense
+      </button>
+    </form>
+  </section>
+
+  <section class="history-panel">
+    <div class="history-toolbar">
+      <div><h2>{{ month_label }}</h2><p>{{ expenses | length }} purchases · {{ expense_total_cents | money }}</p></div>
+      <form method="get" class="filter-form">
+        <input type="month" name="month" value="{{ month }}" aria-label="Expense month">
+        <select name="category" aria-label="Filter category" onchange="this.form.requestSubmit()">
+          <option value="">All categories</option>
+          {% for category in categories %}<option value="{{ category.id }}" {% if filtered_category == category.id %}selected{% endif %}>{{ category.name }}</option>{% endfor %}
+        </select>
+        <button class="icon-button" title="Apply filters" aria-label="Apply filters"><i data-lucide="list-filter" aria-hidden="true"></i></button>
+      </form>
+    </div>
+    {% if expenses %}
+    <div class="expense-list full-list">
+      {% for expense in expenses %}
+      <div class="expense-row">
+        <div class="expense-avatar">{{ expense.item[0] | upper }}</div>
+        <div class="expense-main">
+          <strong>{{ expense.item }}</strong>
+          <span>{{ expense.category }} · {{ expense.created_by }}{% if expense.notes %} · {{ expense.notes }}{% endif %}</span>
+        </div>
+        <div class="expense-amount">
+          <strong>{{ expense.amount_cents | money }}</strong>
+          <span>{{ expense.date }}</span>
+        </div>
+        <form method="post" action="/expenses/{{ expense.id }}/delete" hx-confirm="Delete this expense?">
+          <input type="hidden" name="month" value="{{ month }}">
+          <button class="delete-button" title="Delete expense" aria-label="Delete {{ expense.item }}"><i data-lucide="trash-2" aria-hidden="true"></i></button>
+        </form>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state compact"><div class="empty-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8v4l3 2"/><circle cx="12" cy="12" r="9"/></svg></div><h3>No matching expenses</h3><p>New purchases will appear here.</p></div>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

@@ -1,0 +1,23 @@
+{
+  "private": true,
+  "version": "2.0.0",
+  "scripts": {
+    "build": "npm run build:css && npm run build:htmx && npm run build:icons",
+    "build:css": "tailwindcss -i ./app/static/src.css -o ./app/static/app.css --minify",
+    "build:htmx": "cp ./node_modules/htmx.org/dist/htmx.min.js ./app/static/htmx.min.js",
+    "build:icons": "cp ./node_modules/lucide/dist/umd/lucide.min.js ./app/static/lucide.min.js"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "^0.18.5",
+    "@tailwindcss/cli": "^4.1.11",
+    "htmx.org": "^2.0.6",
+    "lucide": "^1.24.0",
+    "tailwindcss": "^4.1.11",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.10",
+    "wrangler": "^4.111.0"
+  },
+  "dependencies": {
+    "jose": "^6.2.3"
+  }
+}

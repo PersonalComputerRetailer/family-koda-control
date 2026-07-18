@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Budget Settings{% endblock %}
+{% block content %}
+<section class="page-heading">
+  <div>
+    <p class="eyebrow">Monthly plan</p>
+    <h1>Budget settings</h1>
+    <p class="subheading">These category limits repeat automatically each calendar month.</p>
+  </div>
+</section>
+
+{% if saved %}<div class="alert success" role="status">Budget settings saved.</div>{% endif %}
+{% if error %}<div class="alert error" role="alert">{{ error }}</div>{% endif %}
+
+<div class="budget-layout">
+  <section class="budget-panel">
+    <div class="panel-heading">
+      <div class="panel-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v18h18"/><path d="m7 16 4-5 4 3 5-7"/></svg></div>
+      <div><h2>Category limits</h2><p>Update the amount available in a typical month.</p></div>
+    </div>
+    <form method="post" action="/budgets">
+      <div class="budget-rows">
+        {% for category in categories %}
+        <label class="budget-row" for="budget-{{ category.id }}">
+          <span>{{ category.name }}</span>
+          <span class="money-input compact-money"><span>$</span><input id="budget-{{ category.id }}" type="number" name="budget_{{ category.id }}" min="0" step="0.01" inputmode="decimal" value="{{ '%.2f' | format(category.monthly_budget_cents / 100) }}" required></span>
+        </label>
+        {% endfor %}
+      </div>
+      <div class="panel-actions"><button type="submit" class="primary-button"><i data-lucide="check" aria-hidden="true"></i>Save budgets</button></div>
+    </form>
+  </section>
+
+  <aside class="add-category-panel">
+    <div class="panel-heading small-heading">
+      <div class="panel-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></div>
+      <div><h2>Add category</h2><p>Create another monthly spending bucket.</p></div>
+    </div>
+    <form method="post" action="/categories" class="stacked-form">
+      <div class="field"><label for="category-name">Name</label><input id="category-name" type="text" name="name" minlength="2" maxlength="50" placeholder="Groceries" required></div>
+      <div class="field"><label for="monthly-budget">Monthly budget</label><div class="money-input"><span>$</span><input id="monthly-budget" type="number" name="monthly_budget" min="0.01" step="0.01" inputmode="decimal" placeholder="0.00" required></div></div>
+      <button type="submit" class="secondary-button full-button">Add category</button>
+    </form>
+  </aside>
+</div>
+{% endblock %}
