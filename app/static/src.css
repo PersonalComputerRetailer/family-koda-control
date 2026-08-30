@@ -216,3 +216,17 @@
   .budget-row { align-items: flex-start; flex-direction: column; }
   .compact-money { width: 100%; }
 }
+/* Long-term funds keep their editable details together in one inset card. */
+.long-term-fund-row { display: grid; gap: .75rem; padding: 1.25rem 0; }
+.long-term-fund-details { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; padding: 1rem; border: 1px solid var(--color-line); border-radius: .5rem; background: var(--color-raised); }
+.long-term-fund-details .budget-name-control { grid-column: 1 / -1; display: grid; gap: .375rem; max-width: 30rem; }
+.long-term-fund-details .budget-name-control label, .long-term-field > span { color: var(--color-ink); font-size: .75rem; font-weight: 700; }
+.long-term-fund-details .budget-name-control input { background: var(--color-surface); }
+.long-term-field { display: grid; gap: .375rem; }
+.long-term-fund-row .compact-money { width: 100%; }
+.long-term-field > input { width: 100%; min-width: 0; height: 2.5rem; border: 1px solid var(--color-line); border-radius: .375rem; background: var(--color-surface); padding: 0 .6rem; color: var(--color-ink); }
+.long-term-fund-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .5rem; }
+.long-term-fund-actions .secondary-button { min-height: 2.25rem; padding: 0 .75rem; }
+.fund-delete-button:hover { border-color: var(--color-red-700); color: var(--color-red-700); }
+@media (max-width: 639px) { .long-term-fund-details { grid-template-columns: 1fr; } .long-term-fund-details .budget-name-control { grid-column: 1; } .long-term-fund-actions { justify-content: stretch; } .long-term-fund-actions .secondary-button { flex: 1; } }
+.expense-main .long-term-fund-label { display: inline-flex; width: fit-content; align-items: center; margin: .375rem 0 0; overflow: visible; border-radius: .25rem; background: var(--color-raised); padding: .125rem .375rem; color: var(--color-primary); font-size: .6875rem; font-weight: 700; line-height: 1.2; white-space: normal; }
