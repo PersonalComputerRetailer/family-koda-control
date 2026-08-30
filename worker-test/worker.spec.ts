@@ -71,9 +71,16 @@ describe("cash flow Worker", () => {
     expect(dashboard).toContain("Special occasions");
     expect(dashboard).toContain("$800.00 left");
     expect(dashboard).toContain("<strong>Spent:</strong> $0.00");
-    expect(dashboard).toContain(`/expenses?month=2026-07&long_term_budget=${fund!.id}`);
-    expect(await (await fetch(`/expenses?month=2026-07&long_term_budget=${fund!.id}`)).text()).toContain("Birthday decorations");
-    expect(await (await fetch(`/expenses?month=2026-07&long_term_budget=${fund!.id}`)).text()).toContain(`long-term-fund-label">Special occasions`);
+    expect(dashboard).toContain(`/expenses?long_term_budget=${fund!.id}`);
+    expect(await (await fetch(`/expenses?long_term_budget=${fund!.id}`)).text()).toContain("Birthday decorations");
+    expect(await (await fetch(`/expenses?long_term_budget=${fund!.id}`)).text()).toContain(`long-term-fund-label">Special occasions`);
+    await fetch("/expenses", { method: "POST", headers: { "content-type": "application/x-www-form-urlencoded" }, body: form({ expense_date: "2025-01-15", item: "Old decorations", amount: "25", category_id: "6", created_by: "", notes: "", long_term_budget_id: String(fund!.id), month: "2025-01" }) });
+    const allTime = await (await fetch(`/expenses?long_term_budget=${fund!.id}`)).text();
+    expect(allTime).toContain("All time");
+    expect(allTime).toContain("Old decorations");
+    const lastYear = await (await fetch(`/expenses?long_term_budget=${fund!.id}&fund_range=year`)).text();
+    expect(lastYear).toContain("Last 12 months");
+    expect(lastYear).not.toContain("Old decorations");
   });
   it("edits unused funds, blocks deleting used funds, and archives them", async () => {
     await fetch("/long-term-budgets", { method: "POST", headers: { "content-type": "application/x-www-form-urlencoded" }, body: form({ name: "Holiday fund", amount: "400", expires_on: "" }) });
