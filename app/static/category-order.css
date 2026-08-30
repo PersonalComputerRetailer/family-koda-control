@@ -21,9 +21,15 @@
   cursor: pointer;
 }
 .category-order-button:hover { background: var(--color-raised); color: var(--color-primary); }
+.category-order-button:active,
+.category-order-button.is-clicked { background: var(--color-raised); color: var(--color-primary); }
 .category-order-button svg { width: 1rem; height: 1rem; }
 .category-delete-button:hover { color: var(--color-red-700); background: var(--color-red-50); }
-:root[data-theme="dark"] .category-delete-button:hover { color: #fca5a5; background: rgba(239, 68, 68, .15); }
+.category-delete-button:active,
+.category-delete-button.is-clicked { color: var(--color-red-700); background: var(--color-red-50); }
+:root[data-theme="dark"] .category-delete-button:hover,
+:root[data-theme="dark"] .category-delete-button:active,
+:root[data-theme="dark"] .category-delete-button.is-clicked { color: #fca5a5; background: rgba(239, 68, 68, .15); }
 :root[data-theme="dark"] .budget-name-control input { background: transparent; color: var(--color-ink); }
 
 @media (max-width: 639px) {

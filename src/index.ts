@@ -85,10 +85,36 @@ const themeScript = `<script>
 if (!window.__kodaThemeBound) {
   window.__kodaThemeBound = true;
   document.addEventListener("click", (event) => {
+    const button = event.target.closest("button, .primary-button, .secondary-button, .icon-button");
+    if (button && !button.matches(":disabled")) {
+      button.classList.remove("is-clicked");
+      void button.offsetWidth;
+      button.classList.add("is-clicked");
+      window.setTimeout(() => button.classList.remove("is-clicked"), 550);
+    }
+    const addExpense = event.target.closest(".header-action");
+    if (addExpense instanceof HTMLAnchorElement) {
+      event.preventDefault();
+      if (addExpense.dataset.opening) return;
+      addExpense.dataset.opening = "true";
+      addExpense.classList.add("is-submitting");
+      const label = addExpense.querySelector("span");
+      if (label) label.textContent = "Opening…";
+      window.setTimeout(() => window.location.assign(addExpense.href), 350);
+      return;
+    }
     if (!event.target.closest("#theme-toggle")) return;
     const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
     document.documentElement.dataset.theme = next;
     try { localStorage.setItem("koda-theme", next); } catch (e) {}
+  });
+  document.addEventListener("submit", (event) => {
+    const button = event instanceof SubmitEvent ? event.submitter : null;
+    if (!(button instanceof HTMLButtonElement) || !button.classList.contains("primary-button")) return;
+    button.classList.add("is-submitting");
+    button.disabled = true;
+    button.dataset.originalLabel = button.innerHTML;
+    button.textContent = "Saving…";
   });
 }
 </script>`;
@@ -96,7 +122,7 @@ if (!window.__kodaThemeBound) {
 function page(title: string, active: string, body: string, code = 200) {
   const nav = (path: string, label: string, key: string) => `<a href="${path}" class="nav-link ${active === key ? "active" : ""}">${label}</a>`;
   const mobile = (path: string, label: string, key: string) => `<a href="${path}" class="mobile-nav-link ${active === key ? "active" : ""}">${label}</a>`;
-  return new Response(`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#0f766e"><script>(function(){try{var t=localStorage.getItem('koda-theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.dataset.theme=t;}catch(e){}})();</script><title>${esc(title)} | KODA</title><link rel="stylesheet" href="/app.css"><link rel="stylesheet" href="/category-order.css"><script src="/htmx.min.js" defer></script><script src="/lucide.min.js" defer></script><script>document.addEventListener("DOMContentLoaded",()=>lucide.createIcons());document.addEventListener("htmx:afterSwap",()=>lucide.createIcons());</script></head><body hx-boost="true" hx-indicator="#page-loader"><div id="page-loader" class="page-loader htmx-indicator"></div><header class="site-header"><div class="shell header-inner"><a class="brand" href="/">Family Koda Control<span class="brand-version">v2.0</span></a><nav class="desktop-nav">${nav("/", "Dashboard", "dashboard")}${nav("/expenses", "Expenses", "expenses")}${nav("/budgets", "Budgets", "budgets")}</nav><button type="button" class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode"><svg class="theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"/></svg><svg class="theme-icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button><a href="/expenses" class="primary-button header-action"><i data-lucide="plus"></i><span>Add expense</span></a></div></header><main class="shell main-content">${body}</main><nav class="mobile-nav">${mobile("/", "Dashboard", "dashboard")}${mobile("/expenses", "Expenses", "expenses")}${mobile("/budgets", "Budgets", "budgets")}</nav>${categoryOrderScript}${themeScript}${localDateScript}</body></html>`, { status: code, headers: { "content-type": "text/html; charset=UTF-8" } });
+  return new Response(`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#0f766e"><script>(function(){try{var t=localStorage.getItem('koda-theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.dataset.theme=t;}catch(e){}})();</script><title>${esc(title)} | KODA</title><link rel="stylesheet" href="/app.css"><link rel="stylesheet" href="/category-order.css"><script src="/htmx.min.js" defer></script><script src="/lucide.min.js" defer></script><script>document.addEventListener("DOMContentLoaded",()=>lucide.createIcons());document.addEventListener("htmx:afterSwap",()=>lucide.createIcons());</script></head><body hx-boost="true" hx-indicator="#page-loader"><div id="page-loader" class="page-loader htmx-indicator"></div><header class="site-header"><div class="shell header-inner"><a class="brand" href="/">Family Koda Control<span class="brand-version">v2.0</span></a><nav class="desktop-nav">${nav("/", "Dashboard", "dashboard")}${nav("/expenses", "Expenses", "expenses")}${nav("/budgets", "Budgets", "budgets")}</nav><button type="button" class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode"><svg class="theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"/></svg><svg class="theme-icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button><a href="/expenses" class="primary-button header-action" hx-boost="false"><i data-lucide="plus"></i><span>Add expense</span></a></div></header><main class="shell main-content">${body}</main><nav class="mobile-nav">${mobile("/", "Dashboard", "dashboard")}${mobile("/expenses", "Expenses", "expenses")}${mobile("/budgets", "Budgets", "budgets")}</nav>${categoryOrderScript}${themeScript}${localDateScript}</body></html>`, { status: code, headers: { "content-type": "text/html; charset=UTF-8" } });
 }
 
 async function query<T>(statement: D1PreparedStatement) { return (await statement.run<T>()).results; }
