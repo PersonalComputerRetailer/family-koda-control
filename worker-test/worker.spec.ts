@@ -97,5 +97,15 @@ describe("cash flow Worker", () => {
     expect(blocked.headers.get("location")).toContain("Archive");
     await fetch(`/long-term-budgets/${used!.id}/archive`, { method: "POST" });
     expect(await env.DB.prepare("SELECT is_archived FROM long_term_budget WHERE id=?").bind(used!.id).first<{ is_archived: number }>("is_archived")).toBe(1);
+    expect(await (await fetch("/")).text()).not.toContain(`/expenses?long_term_budget=${used!.id}`);
+    expect(await (await fetch("/budgets")).text()).toContain(`/long-term-budgets/${used!.id}/unarchive`);
+    const restored = await fetch(`/long-term-budgets/${used!.id}/unarchive`, { method: "POST" });
+    expect(restored.status).toBe(303);
+    expect(await env.DB.prepare("SELECT is_archived FROM long_term_budget WHERE id=?").bind(used!.id).first<{ is_archived: number }>("is_archived")).toBe(0);
+    const dashboard = await (await fetch("/")).text();
+    expect(dashboard).toContain(`/expenses?long_term_budget=${used!.id}`);
+    expect(dashboard).toContain("$30.00");
+    expect(await (await fetch(`/expenses?long_term_budget=${used!.id}`)).text()).toContain("Birthday cake");
+    expect((await fetch(`/long-term-budgets/${used!.id}/unarchive`, { method: "POST" })).headers.get("location")).toContain("error=");
   });
 });
